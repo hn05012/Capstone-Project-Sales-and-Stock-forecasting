@@ -139,7 +139,7 @@ def plot_loss (history, name):
     plt.savefig(filename)
     # plt.show()
 
-def inverse_transformation(scaler_y, y_train, y_test):
+def inverse_transformation(scaler_y, y_train:np.ndarray, y_test:np.ndarray):
     y_test = scaler_y.inverse_transform(y_test)
     y_train = scaler_y.inverse_transform(y_train)
     return y_train, y_test
@@ -161,8 +161,8 @@ def plot_fit(fit, y_train, name, column_name, epochs):
     plt.ylabel('Sales')
     plt.title(column_name)
     filename = column_name + ' model fitting ' + str(epochs)
-    plt.savefig(filename)
-    # plt.show()
+    # plt.savefig(filename)
+    plt.show()
 
 def prediction(model, x_test, scaler_y):
     prediction = model.predict(x_test)
@@ -178,11 +178,11 @@ def plot_future(prediction, y_test, name, column_name, epochs):
             label='Prediction ' + name)
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
-    plt.ylabel('Weekly Sales')
+    plt.ylabel('Sales')
     plt.title(column_name)
     filename = column_name + ' prediction ' + str(epochs)
-    plt.savefig(filename)
-    # plt.show()
+    # plt.savefig(filename)
+    plt.show()
 
 def evaluate_prediction(predictions, actual, model_name):
     errors = predictions - actual
@@ -241,28 +241,17 @@ def main():
 
 
 
-    file = 'Data\main_categories_features.csv'
+    file = 'category a228.csv'
     data = create_df(file)
     data = segment_df(data, '2017-04-01','2021-12-01')
+    view_df(data)
     # view_df(data)
     data = replace_missing(data)
     training_df, testing_df = train_test_split(data, 0.8)
     
-    main_cat = ['category r179f','category d230v','category X107H','category o52A','category I108K','category u85c','category a228a','category B163E',
- 'category R72O',
- 'category C176l',
- 'category c27J',
- 'category z239x',
- 'category Q239q',
- 'category Y159X',
- 'category e136a',
- 'category o148Y',
- 'category N189r',
- 'category B9q',
- 'category M3Y'
- ]
+    target_brands = ['brand t140p', 'brand v177j', 'brand T75q', 'brand w32S', 'brand G56h']
 
-    x_train, y_train, x_test, y_test = create_X_Y_train(training_df, testing_df, main_cat)
+    x_train, y_train, x_test, y_test = create_X_Y_train(training_df, testing_df, target_brands)
     
     scaler_x, scaler_y, train_x_norm, train_y_norm, test_x_norm, test_y_norm = scale_and_transform(x_train, y_train, x_test, y_test)
     
@@ -271,11 +260,11 @@ def main():
     x_test_3d, y_test_3d = create_dataset(test_x_norm, test_y_norm, TIME_STEPS)
     x_train_3d, y_train_3d = create_dataset(train_x_norm, train_y_norm, TIME_STEPS)
     
-    model_bilstm = create_model_bilstm(128, 'huber_loss', x_train_3d, len(main_cat))
-    model_lstm = create_model(LSTM, 128, 'huber_loss', x_train_3d, len(main_cat))
+    model_bilstm = create_model_bilstm(128, 'huber_loss', x_train_3d, len(target_brands))
+    model_lstm = create_model(LSTM, 128, 'huber_loss', x_train_3d, len(target_brands))
 
     epochs = 500
-    
+
     history_bilstm = fit_model(model_bilstm, epochs , x_train_3d, y_train_3d)
     history_lstm = fit_model(model_lstm, epochs, x_train_3d, y_train_3d)
 
@@ -286,17 +275,37 @@ def main():
 
     bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
     lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
+    
+    df_train_bilstm = pd.DataFrame(bilstm_fit, columns= ['brand t140p train', 'brand v177j train', 'brand T75q train', 'brand w32S train', 'brand G56h train'] )
+    df_train_lstm = pd.DataFrame(lstm_fit, columns= ['brand t140p train', 'brand v177j train', 'brand T75q train', 'brand w32S train', 'brand G56h train'])
 
-    for i in range(len(main_cat)):
-        plot_fit(bilstm_fit[i], y_train[i], 'BiLSTM', main_cat[i], epochs)
-        plot_fit(lstm_fit[i], y_train[i], 'LSTM', main_cat[i], epochs)
+    df_y_train = pd.DataFrame(y_train, columns = ['brand t140p actual', 'brand v177j actual', 'brand T75q actual', 'brand w32S actual', 'brand G56h actual'])
 
+    df_concat_train_bilstm = pd.concat([df_train_bilstm, df_y_train], axis=1)
+    df_concat_train_lstm = pd.concat([df_train_lstm, df_y_train], axis=1)
+    
+    df_concat_train_bilstm.to_csv('Stock Category Model Results\df_train_bilstm 500 epochs.csv')
+    df_concat_train_lstm.to_csv('Stock Category Model Results\df_train_lstm 500 epochs.csv')
+    
     prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
     prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
 
-    for i in range(len(main_cat)):
-        plot_future(prediction_bilstm[i], y_test[i], 'BiLSTM', main_cat[i], epochs)
-        plot_future(prediction_lstm[i], y_test[i], 'LSTM', main_cat[i], epochs)
+    df_test_bilstm = pd.DataFrame(prediction_bilstm, columns= ['brand t140p test', 'brand v177j test', 'brand T75q test', 'brand w32S test', 'brand G56h test'] )
+    df_test_lstm = pd.DataFrame(prediction_lstm, columns= ['brand t140p test', 'brand v177j test', 'brand T75q test', 'brand w32S test', 'brand G56h test'])
+
+    df_y_test = pd.DataFrame(y_test, columns = ['brand t140p actual', 'brand v177j actual', 'brand T75q actual', 'brand w32S actual', 'brand G56h actual'])
+
+
+    df_concat_test_bilstm = pd.concat([df_test_bilstm, df_y_test], axis=1)
+    df_concat_test_lstm = pd.concat([df_test_lstm, df_y_test], axis=1)
+        
+    df_concat_test_bilstm.to_csv('Stock Category Model Results\df_test_bilstm 500 epochs.csv')
+    df_concat_test_lstm.to_csv('Stock Category Model Results\df_test_lstm 500 epochs.csv')
+
+
+    # for i in range(len(prediction_bilstm[1])):
+    #     plot_future(prediction_bilstm[i], y_test[i], 'BiLSTM', target_brands[i], epochs)
+    #     plot_future(prediction_lstm[i], y_test[i], 'LSTM', target_brands[i], epochs)
 
     evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     evaluate_prediction(prediction_lstm, y_test, 'LSTM')
