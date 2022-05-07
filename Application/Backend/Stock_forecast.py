@@ -1,7 +1,4 @@
-from cgi import print_arguments
-from unittest import result
 from multi_lstm import *
-import os
 
 
 def main(epochs, time_steps, loss, neurons):
@@ -38,25 +35,32 @@ def main(epochs, time_steps, loss, neurons):
 
         path = '../Results/Stock Predictions'
 
-        plot_loss_stocks (history_bilstm, fname, 'BILSTM', path, epochs, neurons, time_steps)
-        plot_loss_stocks (history_lstm, fname, 'LSTM', path, epochs, neurons, time_steps)
+        # plot_loss_stocks (history_bilstm, 'BILSTM', fname, path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
+        # plot_loss_stocks (history_lstm, 'LSTM', fname, path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
 
         y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
         
         bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
         lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
+        # plot_fit_Stocks(bilstm_fit, y_train, 'BiLSTM', fname, path, epochs, neurons, time_steps)    # hassam comment this line to run forecast onli
+        # plot_fit_Stocks(lstm_fit, y_train, 'LSTM', fname, path, epochs, neurons, time_steps)        # hassam comment this line to run forecast onli
+        
         prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
         prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
+
+        # plot_future_Stocks(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
+        # plot_future_Stocks(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
 
         df = pd.DataFrame(prediction_lstm, columns=target_brands)
         forecast_dates = testing_df.index.tolist()[-df.shape[0]:]
         df['Date'] = forecast_dates
         df.set_index('Date', inplace=True)
+        df = df.where(df < 0, 0)
         
         results[fname] = df
     
     return results
 
 
-stock_predictions = main(epochs=1, time_steps=1, loss = 'huber_loss', neurons=128)
+stock_predictions = main(epochs=1, time_steps=3, loss = 'huber_loss', neurons=128)

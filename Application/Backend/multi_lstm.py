@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
-
+import os
 
 
 
@@ -145,7 +145,7 @@ def plot_loss (history, name, path, epochs, neurons, timesteps):
     plt.title(title)
     plt.savefig(filename)
 
-def plot_loss_stocks (history, filename, name, path, epochs, neurons, timesteps):
+def plot_loss_stocks (history, name, filename, path, epochs, neurons, timesteps):
     plt.figure(figsize = (10, 6))
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -183,12 +183,27 @@ def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
     plt.savefig(filename)
     # plt.show()
 
+def plot_fit_Stocks(fit, y_train, name, filename, path, epochs, neurons, timesteps):
+    plt.figure(figsize=(10, 6))
+    range_future = len(fit)
+    plt.plot(np.arange(range_future), np.array(y_train), 
+             label='Training Data')     
+    plt.plot(np.arange(range_future),np.array(fit),
+            label='Model Fit ' + name)
+    plt.legend(loc='upper left')
+    plt.xlabel('Time')
+    plt.ylabel('Sales')
+    title = 'model_fitting' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.savefig(filename)
+    # plt.show()
+
 def prediction(model, x_test, scaler_y):
     prediction = model.predict(x_test)
     prediction = scaler_y.inverse_transform(prediction)
     return prediction
 
-def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
+def plot_future(prediction, y_test, name, filename, path, epochs, neurons, timesteps):
     plt.figure(figsize=(10, 6))
     range_future = len(prediction)
     plt.plot(np.arange(range_future), np.array(y_test), 
@@ -199,6 +214,22 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
     title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.savefig(filename)
+    # plt.show()
+
+def plot_future_Stocks(prediction, y_test, name, path, epochs, neurons, timesteps):
+    plt.figure(figsize=(10, 6))
+    range_future = len(prediction)
+    plt.plot(np.arange(range_future), np.array(y_test), 
+             label='Test Data')     
+    plt.plot(np.arange(range_future),np.array(prediction),
+            label='Prediction ' + name)
+    plt.legend(loc='upper left')
+    plt.xlabel('Time (week)')
+    plt.ylabel('Sales')
+    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()

@@ -29,16 +29,16 @@ def main(epochs, time_steps, loss, neurons):
 
     path = '../Results/Sales Predictions'
 
-    plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)
-    plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps)
+    plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)                 # hassam comment this line to run forecast onli
+    plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps)                     # hassam comment this line to run forecast onli
 
     y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
 
     bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
     lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)
-    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)
+    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)              # hassam comment this line to run forecast onli
+    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)                  # hassam comment this line to run forecast onli
 
     prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
     prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
@@ -46,8 +46,8 @@ def main(epochs, time_steps, loss, neurons):
     sales = flatten_nd_list(prediction_lstm.tolist())
     forecasted_dates = testing_df.index.tolist()[-len(sales):]
 
-    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)
-    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)
+    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)     # hassam comment this line to run forecast onli
+    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)         # hassam comment this line to run forecast onli
 
     # evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     # evaluate_prediction(prediction_lstm, y_test, 'LSTM')
@@ -57,15 +57,8 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
-# for saving results
-# epchs = [10, 50, 100, 200, 500]
-t_s = [3, 5, 7, 10, 14]
-ns = [32, 64, 128]
 
-# for e in epchs:
-for t in t_s:
-    for n in ns:
-        f,s = main(epochs=500, time_steps=t, loss='huber_loss', neurons=n)
+f,s = main(epochs=500, time_steps=14, loss='huber_loss', neurons=128)
 
 
 # plot sales forecast
