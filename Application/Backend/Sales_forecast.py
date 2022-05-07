@@ -21,31 +21,33 @@ def main(epochs, time_steps, loss, neurons):
     x_test_3d, y_test_3d = create_dataset(test_x_norm, test_y_norm, TIME_STEPS)
     x_train_3d, y_train_3d = create_dataset(train_x_norm, train_y_norm, TIME_STEPS)
     
-    # model_bilstm = create_model_bilstm(128, 'huber_loss', x_train_3d, 1)
+    model_bilstm = create_model_bilstm(neurons, loss, x_train_3d, 1)
     model_lstm = create_model(LSTM, neurons, loss, x_train_3d, 1)
 
-    # history_bilstm = fit_model(model_bilstm, 3 , x_train_3d, y_train_3d)
+    history_bilstm = fit_model(model_bilstm, epochs , x_train_3d, y_train_3d)
     history_lstm = fit_model(model_lstm, epochs, x_train_3d, y_train_3d)
 
-    # plot_loss (history_bilstm, 'BILSTM')
-    # plot_loss (history_lstm, 'LSTM')
+    path = '../Results/Sales Predictions'
+
+    plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)
+    plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps)
 
     y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
 
-    # bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
-    # lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
+    bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
+    lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-    # plot_fit(bilstm_fit, y_train, 'BiLSTM', 10)
-    # plot_fit(lstm_fit, y_train, 'LSTM', 10)
+    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)
+    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)
 
-    # prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
+    prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
     prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
 
     sales = flatten_nd_list(prediction_lstm.tolist())
     forecasted_dates = testing_df.index.tolist()[-len(sales):]
 
-    # plot_future(prediction_bilstm, y_test, 'BiLSTM', 10)
-    # plot_future(prediction_lstm, y_test, 'LSTM', 10)
+    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)
+    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)
 
     # evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     # evaluate_prediction(prediction_lstm, y_test, 'LSTM')
@@ -55,12 +57,22 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
+# for saving results
+epchs = [10, 50, 100, 200, 500]
+t_s = [3, 5, 7, 10, 14]
+ns = [32, 64, 128]
+
+for e in epchs:
+    for t in t_s:
+        for n in ns:
+            f,s = main(epochs=e, time_steps=t, loss='huber_loss', neurons=n)
+
+
 # plot sales forecast
-f,s = main(epochs=3, time_steps=10, loss='huber_loss', neurons=128)
-plt.figure(figsize = (10, 6))
-plt.plot(f, s)
-plt.ylabel('Sales')
-plt.xlabel('dates')
-plt.title('forecast')
-plt.xticks(rotation = 'vertical')
-plt.show()
+# plt.figure(figsize = (10, 6))
+# plt.plot(f, s)
+# plt.ylabel('Sales')
+# plt.xlabel('dates')
+# plt.title('forecast')
+# plt.xticks(rotation = 'vertical')
+# plt.show()

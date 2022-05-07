@@ -127,17 +127,18 @@ def fit_model(model, epochs, x_train, y_train):
                         )
     return history
 
-def plot_loss (history, name):
+def plot_loss (history, name, path, epochs, neurons, timesteps):
     plt.figure(figsize = (10, 6))
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.ylabel('Loss')
     plt.xlabel('epoch')
     plt.legend(['Train loss', 'Validation loss'], loc='upper right')
-    plt.title(name)
-    filename = 'loss ' + name
-    # plt.savefig(filename)
-    plt.show()
+    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.title(title)
+    plt.savefig(filename)
+    # plt.show()
 
 def inverse_transformation(scaler_y, y_train:np.ndarray, y_test:np.ndarray):
     y_test = scaler_y.inverse_transform(y_test)
@@ -149,7 +150,7 @@ def model_fitting(model, x_train, scaler_y):
     fitting = model.predict(x_train)
     return scaler_y.inverse_transform(fitting)
 
-def plot_fit(fit, y_train, name, epochs):
+def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
     plt.figure(figsize=(10, 6))
     range_future = len(fit)
     plt.plot(np.arange(range_future), np.array(y_train), 
@@ -159,16 +160,17 @@ def plot_fit(fit, y_train, name, epochs):
     plt.legend(loc='upper left')
     plt.xlabel('Time')
     plt.ylabel('Sales')
-    filename = ' model fitting ' + str(epochs)
-    # plt.savefig(filename)
-    plt.show()
+    title = 'model_fitting' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.savefig(filename)
+    # plt.show()
 
 def prediction(model, x_test, scaler_y):
     prediction = model.predict(x_test)
     prediction = scaler_y.inverse_transform(prediction)
     return prediction
 
-def plot_future(prediction, y_test, name, epochs):
+def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
     plt.figure(figsize=(10, 6))
     range_future = len(prediction)
     plt.plot(np.arange(range_future), np.array(y_test), 
@@ -178,9 +180,10 @@ def plot_future(prediction, y_test, name, epochs):
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
-    filename = ' prediction ' + str(epochs)
-    # plt.savefig(filename)
-    plt.show()
+    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.savefig(filename)
+    # plt.show()
 
 def evaluate_prediction(predictions, actual, model_name):
     errors = predictions - actual
