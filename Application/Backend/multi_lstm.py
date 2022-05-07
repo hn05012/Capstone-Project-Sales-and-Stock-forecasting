@@ -9,6 +9,12 @@ from matplotlib import pyplot as plt
 
 
 
+
+class haltCallback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        if(logs.get('loss') <= 0.001):
+            self.model.stop_training = True
+
 def create_df(file):
     df = pd.read_csv(file,)
     df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
@@ -135,6 +141,18 @@ def plot_loss (history, name, path, epochs, neurons, timesteps):
     plt.xlabel('epoch')
     plt.legend(['Train loss', 'Validation loss'], loc='upper right')
     title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.title(title)
+    plt.savefig(filename)
+
+def plot_loss_stocks (history, filename, name, path, epochs, neurons, timesteps):
+    plt.figure(figsize = (10, 6))
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.ylabel('Loss')
+    plt.xlabel('epoch')
+    plt.legend(['Train loss', 'Validation loss'], loc='upper right')
+    title = filename + '_' + 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
     filename = path + '/' + title + '.png'
     plt.title(title)
     plt.savefig(filename)
