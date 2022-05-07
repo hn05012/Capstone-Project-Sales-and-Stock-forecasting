@@ -58,14 +58,14 @@ def main(epochs, time_steps, loss, neurons):
 
 
 # for saving results
-epchs = [10, 50, 100, 200, 500]
+# epchs = [10, 50, 100, 200, 500]
 t_s = [3, 5, 7, 10, 14]
 ns = [32, 64, 128]
 
-for e in epchs:
-    for t in t_s:
-        for n in ns:
-            f,s = main(epochs=e, time_steps=t, loss='huber_loss', neurons=n)
+# for e in epchs:
+for t in t_s:
+    for n in ns:
+        f,s = main(epochs=500, time_steps=t, loss='huber_loss', neurons=n)
 
 
 # plot sales forecast
