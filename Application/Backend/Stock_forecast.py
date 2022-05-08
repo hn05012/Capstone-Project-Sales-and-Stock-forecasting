@@ -16,6 +16,9 @@ def main(epochs, time_steps, loss, neurons):
 
         training_df, testing_df = train_test_split(data, 0.8)
 
+        training_dates = training_df.index.tolist()[-training_df.shape[0]:]
+        
+        
         target_brands = []
         for column in data.columns:
             if "brand" in column:
@@ -33,25 +36,26 @@ def main(epochs, time_steps, loss, neurons):
         history_bilstm = fit_model(model_bilstm, epochs , x_train_3d, y_train_3d)
         history_lstm = fit_model(model_lstm, epochs, x_train_3d, y_train_3d)
 
-        path = '../Results/Stock Predictions'
+        path = '../Results/Stock Predictions/' + fname
+        if not os.path.exists(path):
+            os.makedirs(path)
+        
 
-        # plot_loss_stocks (history_bilstm, 'BILSTM', fname, path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
-        # plot_loss_stocks (history_lstm, 'LSTM', fname, path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
+        plot_loss_stocks (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
+        plot_loss_stocks (history_lstm, 'LSTM', path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
 
-        y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
+        # y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
         
         bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
         lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-        # plot_fit_Stocks(bilstm_fit, y_train, 'BiLSTM', fname, path, epochs, neurons, time_steps)    # hassam comment this line to run forecast onli
-        # plot_fit_Stocks(lstm_fit, y_train, 'LSTM', fname, path, epochs, neurons, time_steps)        # hassam comment this line to run forecast onli
+        plot_fit_Stocks(training_dates, target_brands, bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)    # hassam comment this line to run forecast onli
+        plot_fit_Stocks(training_dates, target_brands, lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)        # hassam comment this line to run forecast onli
         
         prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
         prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
 
-        # plot_future_Stocks(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
-        # plot_future_Stocks(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
-
+    
         df = pd.DataFrame(prediction_lstm, columns=target_brands)
         forecast_dates = testing_df.index.tolist()[-df.shape[0]:]
         df['Date'] = forecast_dates
@@ -59,8 +63,12 @@ def main(epochs, time_steps, loss, neurons):
         df = df.where(df < 0, 0)
         
         results[fname] = df
+        
+        plot_future_Stocks(forecast_dates, target_brands, prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
+        plot_future_Stocks(forecast_dates, target_brands, prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
     
     return results
 
 
-stock_predictions = main(epochs=1, time_steps=3, loss = 'huber_loss', neurons=128)
+stock_predictions = main(epochs=300, time_steps=3, loss = 'huber_loss', neurons=128)
+
