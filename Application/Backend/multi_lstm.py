@@ -162,36 +162,6 @@ def fit_model(model, epochs, x_train, y_train):
     return history
 
 
-
-def plot_loss (history, name, path, epochs, neurons, timesteps):
-    plt.figure(figsize = (10, 6))
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.ylabel('Loss')
-    plt.xlabel('epoch')
-    plt.legend(['Train loss', 'Validation loss'], loc='upper right')
-    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
-    filename = path + '/' + title + '.png'
-    plt.title(title)
-    plt.savefig(filename)
-
-
-
-def plot_loss_stocks (history, name, path, epochs, neurons, timesteps):
-    plt.figure(figsize = (10, 6))
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.ylabel('Loss')
-    plt.xlabel('epoch')
-    plt.legend(['Train loss', 'Validation loss'], loc='upper right')
-    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
-    filename = path + '/' + title + '.png'
-    plt.title(title)
-    plt.savefig(filename)
-    # plt.show()
-
-
-
 def inverse_transformation(scaler_y, y_train:np.ndarray, y_test:np.ndarray):
     y_test = scaler_y.inverse_transform(y_test)
     y_train = scaler_y.inverse_transform(y_train)

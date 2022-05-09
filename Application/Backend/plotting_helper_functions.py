@@ -2,6 +2,40 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
+import os
+
+def plot_loss (history, name, path, epochs, neurons, timesteps):
+    plt.figure(figsize = (10, 6))
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.ylabel('Loss')
+    plt.xlabel('epoch')
+    plt.legend(['Train loss', 'Validation loss'], loc='upper right')
+    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    plt.title(title)
+    plt.savefig(filename)
+
+
+
+def plot_loss_stocks (history, name, path, epochs, neurons, timesteps):
+    
+    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    filename = path + '/' + title + '.png'
+    
+    if not os.path.exists(filename):
+
+        plt.figure(figsize = (10, 6))
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.ylabel('Loss')
+        plt.xlabel('epoch')
+        plt.legend(['Train loss', 'Validation loss'], loc='upper right')
+        plt.title(title)
+        plt.savefig(filename)
+        # plt.show()
+
+
 
 def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
     plt.figure(figsize=(10, 6))
@@ -37,20 +71,23 @@ def plot_fit_Stocks(training_interval, target_brands, fit, y_train, name, path, 
     df = pd.concat([df_actual, df_fit], axis=1)
     for c in df.columns:
         if 'actual' in c:
-            
-            plt.figure(figsize=(10, 6))
-            plt.plot(df.index, df[c], 
-                    label='Training Data')
-            trained = c.split()[0] + ' ' + c.split()[1] + ' train'     
-            plt.plot(df.index,df[trained],
-                    label='Model Fit ' + name)
-            plt.xticks(rotation = 'vertical')
-            plt.legend(loc='upper left')
-            plt.xlabel('Time')
-            plt.ylabel('Stocks')
+
             title = 'model_fitting' + '_' + name + '_' + c.split()[0] + '_' + c.split()[1] + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
             filename = path + '/' + title + '.png'
-            plt.savefig(filename)
+            
+            if not os.path.exists(filename):
+
+                plt.figure(figsize=(10, 6))
+                plt.plot(df.index, df[c], 
+                        label='Training Data')
+                trained = c.split()[0] + ' ' + c.split()[1] + ' train'     
+                plt.plot(df.index,df[trained],
+                        label='Model Fit ' + name)
+                plt.xticks(rotation = 'vertical')
+                plt.legend(loc='upper left')
+                plt.xlabel('Time')
+                plt.ylabel('Stocks')
+                plt.savefig(filename)
 
 
 def prediction(model, x_test, scaler_y):
@@ -95,21 +132,23 @@ def plot_future_Stocks(forecasting_interval, target_brands, prediction, y_test, 
     for c in df.columns:
         if 'actual' in c:
 
-            plt.figure(figsize=(10, 6))
-            plt.plot(df.index, df[c], 
-                    label='Actual Data')
-            frcast = c.split()[0] + ' ' + c.split()[1] + ' forecast' 
-            plt.plot(df.index,df[frcast],
-                    label='Prediction/ forecast ' + name)
-            plt.xticks(rotation = 'vertical')
-            plt.legend(loc='upper left')
-            plt.xlabel('Time')
-            plt.ylabel('Stocks')
             title = 'forecast' + '_' + name + '_' + c.split()[0] + '_' + c.split()[1] + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
-            
             filename = path + '/' + title + '.png'
-            plt.savefig(filename)
-            
+
+            if not os.path.exists(filename):
+        
+                plt.figure(figsize=(10, 6))
+                plt.plot(df.index, df[c], 
+                        label='Actual Data')
+                frcast = c.split()[0] + ' ' + c.split()[1] + ' forecast' 
+                plt.plot(df.index,df[frcast],
+                        label='Prediction/ forecast ' + name)
+                plt.xticks(rotation = 'vertical')
+                plt.legend(loc='upper left')
+                plt.xlabel('Time')
+                plt.ylabel('Stocks')
+                plt.savefig(filename)
+                
 
 
 
