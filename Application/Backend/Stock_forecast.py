@@ -3,16 +3,11 @@ from plotting_helper_functions import *
 
 def main(epochs, time_steps, loss, neurons):
 
-    files = ['category a228a-fix with features.csv',
- 'category B9q-fix with features.csv',
- 'category C176l-fix with features.csv',
- 'category c27J-fix with features.csv',
- 'category d206l-fix with features.csv',
- 'category d230v-fix with features.csv',
- 'category e136a-fix with features.csv',
- 'category I108K-fix with features.csv',
- 'category I242N-fix with features.csv',
- 'category M3Y-fix with features.csv']
+    files = [
+ 'category X107H-fix with features.csv',
+ 'category Y159X-fix with features.csv',
+ 'category z239x-fix with features.csv']
+
     results = dict()
     directory = 'Data\Monthly_Stocks_Data'
     for filename in os.listdir(directory):
@@ -51,8 +46,8 @@ def main(epochs, time_steps, loss, neurons):
                 os.makedirs(path)
             
 
-            # plot_loss_stocks (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
-            # plot_loss_stocks (history_lstm, 'LSTM', path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
+            plot_loss_stocks (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
+            plot_loss_stocks (history_lstm, 'LSTM', path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
 
             y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
             
