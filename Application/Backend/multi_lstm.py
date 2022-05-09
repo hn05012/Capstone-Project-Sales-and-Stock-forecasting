@@ -116,16 +116,16 @@ def create_dataset (x_norm, y_norm, time_steps = 1):
 
 def create_model_bilstm(units, loss, x_train, target_size):
     model = Sequential()
-    model.add(Bidirectional(LSTM(units = units,                             
+    model.add(Bidirectional(LSTM(units = units, activation='relu',                             
               return_sequences=True),
               input_shape=(x_train.shape[1], x_train.shape[2])))
-    model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
-    model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
-    model.add(Bidirectional(LSTM(units = units)))
-    model.add(Dense(target_size))
+    model.add(Bidirectional(LSTM(units = units, activation='relu',return_sequences = True)))
+    model.add(Bidirectional(LSTM(units = units, activation='relu',return_sequences = True)))
+    model.add(Bidirectional(LSTM(units = units, activation='relu',return_sequences = True)))
+    model.add(Bidirectional(LSTM(units = units, activation='relu',)))
+    model.add(Dense(target_size, activation='relu',))
     #Compile model
-    cosine_loss = tf.keras.losses.CosineSimilarity(axis=1)
-    logcosh = tf.keras.losses.LogCosh()
+    
     model.compile(loss=loss, optimizer='adam')
     return model
 
@@ -133,18 +133,21 @@ def create_model_bilstm(units, loss, x_train, target_size):
 
 def create_model(model_name, units, loss, x_train, target_size):
     model = Sequential()
-    model.add(model_name (units = units, return_sequences = True,
+    model.add(model_name (units = units, activation='relu', return_sequences = True,
                 input_shape = [x_train.shape[1], x_train.shape[2]]))
     model.add(Dropout(0.2))
-    model.add(model_name (units = units, return_sequences = True))
+    model.add(model_name (units = units, activation='relu', return_sequences = True))
     model.add(Dropout(0.2))
-    model.add(model_name (units = units, return_sequences = True))
+    model.add(model_name (units = units, activation='relu', return_sequences = True))
     model.add(Dropout(0.2))
-    model.add(model_name (units = units))
+    model.add(model_name (units = units, activation='relu', return_sequences = True))
     model.add(Dropout(0.2))
-    model.add(Dense(units = target_size))
-    cosine_loss = tf.keras.losses.CosineSimilarity(axis=1)
-    logcosh = tf.keras.losses.LogCosh()
+    model.add(model_name (units = units, activation='relu', return_sequences = True))
+    model.add(Dropout(0.2))
+    model.add(model_name (units = units, activation='relu',))
+    model.add(Dropout(0.2))
+    model.add(Dense(units = target_size, activation='relu',))
+
     #Compile model
     model.compile(loss=loss, optimizer='adam')
     return model
@@ -154,10 +157,11 @@ def create_model(model_name, units, loss, x_train, target_size):
 def fit_model(model, epochs, x_train, y_train):
     # early_stop = keras.callbacks.EarlyStopping(monitor = 'val_loss',
     #                                            patience = 10)
+    trainingStopCallback = haltCallback()
     history = model.fit(x_train, y_train, epochs = epochs,  
                         validation_split = 0.2, batch_size = 32, 
                         shuffle = False
-                        # , callbacks = [early_stop]
+                        , callbacks = trainingStopCallback
                         )
     return history
 
