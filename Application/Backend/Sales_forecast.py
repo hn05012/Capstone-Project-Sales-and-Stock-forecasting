@@ -23,11 +23,11 @@ def main(epochs, time_steps, loss, neurons):
     x_test_3d, y_test_3d = create_dataset(test_x_norm, test_y_norm, TIME_STEPS)
     x_train_3d, y_train_3d = create_dataset(train_x_norm, train_y_norm, TIME_STEPS)
     
-    model_bilstm = create_model_bilstm(neurons, loss, x_train_3d, 1)
-    model_lstm = create_model(LSTM, neurons, loss, x_train_3d, 1)
+    model_bilstm = create_model_bilstm('Sales', neurons, loss, x_train_3d, 1)
+    model_lstm = create_model('Sales', LSTM, neurons, loss, x_train_3d, 1)
 
-    history_bilstm = fit_model(model_bilstm, epochs , x_train_3d, y_train_3d)
-    history_lstm = fit_model(model_lstm, epochs, x_train_3d, y_train_3d)
+    history_bilstm = fit_model('Sales', model_bilstm, epochs , x_train_3d, y_train_3d)
+    history_lstm = fit_model('Sales', model_lstm, epochs, x_train_3d, y_train_3d)
 
     path = '../Results/Sales Predictions'
 
@@ -58,12 +58,14 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
-
-config = [(200, 7, 32), (500, 7, 32), (400, 14, 64), (500, 10, 64), 
-        (700, 7, 32), (700, 14, 128), (700, 10, 128)
-        ]
-for c in config:
+# ali uncomment lines 62-66 and comment line 68
+# config = [(200, 7, 32), (500, 7, 32), (400, 14, 64), (500, 10, 64), 
+#         (700, 7, 32), (700, 14, 128), (700, 10, 128)
+#         ]
+# for c in config:
     f,s = main(epochs=c[0], time_steps=c[1], loss='huber_loss', neurons=c[2])
+
+f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
 
 
 # plot sales forecast

@@ -35,11 +35,11 @@ def main(epochs, time_steps, loss, neurons):
             x_test_3d, y_test_3d = create_dataset(test_x_norm, test_y_norm, time_steps)
             x_train_3d, y_train_3d = create_dataset(train_x_norm, train_y_norm, time_steps)
 
-            model_bilstm = create_model_bilstm(neurons, loss, x_train_3d, len(target_brands))
-            model_lstm = create_model(LSTM, neurons, loss, x_train_3d, len(target_brands))
+            model_bilstm = create_model_bilstm('Stocks', neurons, loss, x_train_3d, len(target_brands))
+            model_lstm = create_model('Stocks', LSTM, neurons, loss, x_train_3d, len(target_brands))
             
-            history_bilstm = fit_model(model_bilstm, epochs , x_train_3d, y_train_3d)
-            history_lstm = fit_model(model_lstm, epochs, x_train_3d, y_train_3d)
+            history_bilstm = fit_model('Stocks', model_bilstm, epochs , x_train_3d, y_train_3d)
+            history_lstm = fit_model('Stocks', model_lstm, epochs, x_train_3d, y_train_3d)
 
             path = '../Results/Stock Predictions/' + fname
             if not os.path.exists(path):
