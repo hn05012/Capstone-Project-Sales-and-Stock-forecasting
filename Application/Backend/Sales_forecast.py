@@ -1,4 +1,5 @@
 
+from django import conf
 from multi_lstm import *
 from plotting_helper_functions import*
 
@@ -58,8 +59,11 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
-
-f,s = main(epochs=500, time_steps=14, loss='huber_loss', neurons=128)
+config = [(200, 7, 32), (500, 7, 32), (400, 14, 64), (500, 10, 64), 
+        (700, 7, 32), (700, 14, 128), (700, 10, 128)
+        ]
+for c in config:
+    f,s = main(epochs=c[0], time_steps=c[1], loss='huber_loss', neurons=c[2])
 
 
 # plot sales forecast
