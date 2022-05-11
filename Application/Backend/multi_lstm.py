@@ -157,11 +157,11 @@ def create_model(model_name, units, loss, x_train, target_size):
 def fit_model(model, epochs, x_train, y_train):
     # early_stop = keras.callbacks.EarlyStopping(monitor = 'val_loss',
     #                                            patience = 10)
-    trainingStopCallback = haltCallback()
+    # trainingStopCallback = haltCallback()
     history = model.fit(x_train, y_train, epochs = epochs,  
                         validation_split = 0.2, batch_size = 32, 
                         shuffle = False
-                        , callbacks = trainingStopCallback
+                        # , callbacks = trainingStopCallback
                         )
     return history
 

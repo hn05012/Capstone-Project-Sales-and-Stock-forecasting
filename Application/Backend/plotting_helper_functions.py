@@ -1,4 +1,5 @@
 
+from distutils.log import error
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -38,6 +39,10 @@ def plot_loss_stocks (history, name, path, epochs, neurons, timesteps):
 
 
 def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
+    errors = fit - y_train
+    mse = np.square(errors).mean()
+    rmse = np.sqrt(mse)
+
     plt.figure(figsize=(10, 6))
     range_future = len(fit)
     plt.plot(np.arange(range_future), np.array(y_train), 
@@ -47,7 +52,7 @@ def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
     plt.legend(loc='upper left')
     plt.xlabel('Time')
     plt.ylabel('Sales')
-    title = 'model_fitting' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    title = 'model_fitting' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
@@ -107,7 +112,12 @@ def prediction(model, x_test, scaler_y):
 
 
 
-def plot_future(prediction, y_test, name, filename, path, epochs, neurons, timesteps):
+def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
+    errors = prediction - y_test
+    mse = np.square(errors).mean()
+    rmse = np.sqrt(mse)
+
+
     plt.figure(figsize=(10, 6))
     range_future = len(prediction)
     plt.plot(np.arange(range_future), np.array(y_test), 
@@ -117,7 +127,7 @@ def plot_future(prediction, y_test, name, filename, path, epochs, neurons, times
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
-    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
