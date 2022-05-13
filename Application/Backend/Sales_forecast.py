@@ -77,7 +77,7 @@ def main(epochs, time_steps, loss, neurons):
 # f,s = main(epochs=500, time_steps=7, loss='huber_loss', neurons=128    )
 # f,s = main(epochs=500, time_steps=30, loss='huber_loss', neurons=128    )
 
-f,s = main(epochs=200, time_steps=7, loss='huber_loss', neurons=64    )
+# f,s = main(epochs=200, time_steps=7, loss='huber_loss', neurons=64    )
 # f,s = main(epochs=200, time_steps=10, loss='huber_loss', neurons=64    )
 # f,s = main(epochs=200, time_steps=14, loss='huber_loss', neurons=64    )
 
