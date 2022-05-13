@@ -1,9 +1,11 @@
 
 from distutils.log import error
+import imp
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 import os
+from multi_lstm import evaluate_accuracy
 
 def plot_loss (history, name, path, epochs, neurons, timesteps):
     plt.figure(figsize = (10, 6))
@@ -116,6 +118,7 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
     errors = prediction - y_test
     mse = np.square(errors).mean()
     rmse = np.sqrt(mse)
+    r_sqr = evaluate_accuracy(prediction, y_test)
 
 
     plt.figure(figsize=(10, 6))
@@ -127,7 +130,7 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
-    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
+    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse=' + str(rmse) + '_' + 'r_sqr=' + str(r_sqr)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()

@@ -8,12 +8,16 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
 import os
-
+from sklearn.metrics import r2_score
 
 
 class haltCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs={}):
         if(logs.get('loss') <= 0.001):
+            self.model.stop_training = True
+class haltCallback_Sales(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        if(logs.get('val_loss') < 0.02 and logs.get('loss') < 0.001):
             self.model.stop_training = True
 
 
@@ -187,10 +191,11 @@ def fit_model(module, model, epochs, x_train, y_train):
                             , callbacks = trainingStopCallback
                             )
     else:
+        trainingStopCallback = haltCallback_Sales()
         history = model.fit(x_train, y_train, epochs = epochs,  
                             validation_split = 0.2, batch_size = 32, 
                             shuffle = False
-                            # , callbacks = trainingStopCallback
+                            , callbacks = trainingStopCallback
                             )
     return history
 
@@ -208,5 +213,6 @@ def model_fitting(model, x_train, scaler_y):
     return scaler_y.inverse_transform(fitting)
 
 
-
+def evaluate_accuracy(pred, y_test):
+    return r2_score(y_test, pred)
 

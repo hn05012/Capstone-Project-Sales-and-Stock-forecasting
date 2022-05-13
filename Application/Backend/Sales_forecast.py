@@ -4,6 +4,7 @@ from multi_lstm import *
 from plotting_helper_functions import*
 
 
+
 def main(epochs, time_steps, loss, neurons):
     file = 'Data\Sales\multi_feature_sales_data.csv'
     data = create_df(file)
@@ -54,6 +55,9 @@ def main(epochs, time_steps, loss, neurons):
     # evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     # evaluate_prediction(prediction_lstm, y_test, 'LSTM')
 
+    evaluate_accuracy(prediction_bilstm, y_test)
+    evaluate_accuracy(prediction_lstm, y_test)
+
     return forecasted_dates, sales
 
 
@@ -63,9 +67,29 @@ def main(epochs, time_steps, loss, neurons):
 #         (700, 7, 32), (700, 14, 128), (700, 10, 128)
 #         ]
 # for c in config:
-    f,s = main(epochs=c[0], time_steps=c[1], loss='huber_loss', neurons=c[2])
+    # f,s = main(epochs=c[0], time_steps=c[1], loss='huber_loss', neurons=c[2])
 
-f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=14, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=700, time_steps=10, loss='huber_loss', neurons=128    )
+
+# f,s = main(epochs=500, time_steps=3, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=7, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=30, loss='huber_loss', neurons=128    )
+
+f,s = main(epochs=200, time_steps=7, loss='huber_loss', neurons=64    )
+# f,s = main(epochs=200, time_steps=10, loss='huber_loss', neurons=64    )
+# f,s = main(epochs=200, time_steps=14, loss='huber_loss', neurons=64    )
+
+# f,s = main(epochs=500, time_steps=5, loss='huber_loss', neurons=64    )
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=64    )
+# f,s = main(epochs=500, time_steps=20, loss='huber_loss', neurons=64    )
+
+
+# f,s = main(epochs=500, time_steps=5, loss='huber_loss', neurons=32    )
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=32    )
+# f,s = main(epochs=500, time_steps=20, loss='huber_loss', neurons=32    )
+
 
 
 # plot sales forecast
