@@ -43,9 +43,10 @@ def resample_data(df, size: str):               # size will will specify weekly 
 
 
 
-def moving_average(df, window_size, column_name, new_column_name):
-    data = df
-    data[new_column_name] = data[column_name].rolling(window=window_size).mean()
+def moving_average(df, window_size, column_name):
+    data = df.copy(deep=True)
+    data[column_name] = data[column_name].rolling(window=window_size).mean()
+    data = df.iloc[window_size:, :]
     return data
 
 

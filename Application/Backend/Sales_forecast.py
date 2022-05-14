@@ -32,64 +32,44 @@ def main(epochs, time_steps, loss, neurons):
 
     path = '../Results/Sales Predictions'
 
-    plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)                 # hassam comment this line to run forecast onli
-    plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps)                     # hassam comment this line to run forecast onli
+    # plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)                 # hassam comment this line to run forecast onli
+    # plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps)                     # hassam comment this line to run forecast onli
 
     y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
 
     bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
     lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)              # hassam comment this line to run forecast onli
-    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)                  # hassam comment this line to run forecast onli
+    # plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)              # hassam comment this line to run forecast onli
+    # plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)                  # hassam comment this line to run forecast onli
 
     prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
     prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
 
     sales = flatten_nd_list(prediction_lstm.tolist())
     forecasted_dates = testing_df.index.tolist()[-len(sales):]
+    test = flatten_nd_list(y_test.tolist())
 
-    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)     # hassam comment this line to run forecast onli
-    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)         # hassam comment this line to run forecast onli
+    # plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)     # hassam comment this line to run forecast onli
+    # plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)         # hassam comment this line to run forecast onli
 
     # evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     # evaluate_prediction(prediction_lstm, y_test, 'LSTM')
 
-    evaluate_accuracy(prediction_bilstm, y_test)
-    evaluate_accuracy(prediction_lstm, y_test)
+    # evaluate_accuracy(prediction_bilstm, y_test)
+    # evaluate_accuracy(prediction_lstm, y_test)
+
 
     return forecasted_dates, sales
 
 
 
-# ali uncomment lines 62-66 and comment line 68
-# config = [(200, 7, 32), (500, 7, 32), (400, 14, 64), (500, 10, 64), 
-#         (700, 7, 32), (700, 14, 128), (700, 10, 128)
-#         ]
-# for c in config:
-    # f,s = main(epochs=c[0], time_steps=c[1], loss='huber_loss', neurons=c[2])
 
+f,s = main(epochs=200, time_steps=10, loss='huber_loss', neurons=32    )
 # f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
-# f,s = main(epochs=500, time_steps=14, loss='huber_loss', neurons=128    )
-# f,s = main(epochs=700, time_steps=10, loss='huber_loss', neurons=128    )
-
-# f,s = main(epochs=500, time_steps=3, loss='huber_loss', neurons=128    )
-# f,s = main(epochs=500, time_steps=7, loss='huber_loss', neurons=128    )
-# f,s = main(epochs=500, time_steps=30, loss='huber_loss', neurons=128    )
-
-# f,s = main(epochs=200, time_steps=7, loss='huber_loss', neurons=64    )
-# f,s = main(epochs=200, time_steps=10, loss='huber_loss', neurons=64    )
-# f,s = main(epochs=200, time_steps=14, loss='huber_loss', neurons=64    )
-
-# f,s = main(epochs=500, time_steps=5, loss='huber_loss', neurons=64    )
-# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=64    )
-# f,s = main(epochs=500, time_steps=20, loss='huber_loss', neurons=64    )
-
-
-# f,s = main(epochs=500, time_steps=5, loss='huber_loss', neurons=32    )
-# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=32    )
-# f,s = main(epochs=500, time_steps=20, loss='huber_loss', neurons=32    )
-
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
+# f,s = main(epochs=500, time_steps=10, loss='huber_loss', neurons=128    )
 
 
 # plot sales forecast

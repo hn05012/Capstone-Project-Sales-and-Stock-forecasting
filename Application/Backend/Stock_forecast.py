@@ -46,15 +46,15 @@ def main(epochs, time_steps, loss, neurons):
                 os.makedirs(path)
             
 
-            plot_loss_stocks (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
-            plot_loss_stocks (history_lstm, 'LSTM', path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
+            # plot_loss_stocks (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps)       # hassam comment this line to run forecast onli
+            # plot_loss_stocks (history_lstm, 'LSTM', path, epochs, neurons, time_steps)           # hassam comment this line to run forecast onli
 
             y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
             
             bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
             lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-            plot_fit_Stocks(training_dates, target_brands, bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)    # hassam comment this line to run forecast onli
+            # plot_fit_Stocks(training_dates, target_brands, bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps)    # hassam comment this line to run forecast onli
             plot_fit_Stocks(training_dates, target_brands, lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps)        # hassam comment this line to run forecast onli
             
 
@@ -69,9 +69,9 @@ def main(epochs, time_steps, loss, neurons):
             df = df.where(df < 0, 0)
             
             results[fname] = df
-            
-            plot_future_Stocks(forecast_dates, target_brands, prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
-            plot_future_Stocks(forecast_dates, target_brands, prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
+            print(results)
+            # plot_future_Stocks(forecast_dates, target_brands, prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
+            # plot_future_Stocks(forecast_dates, target_brands, prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
 
     return results
 
