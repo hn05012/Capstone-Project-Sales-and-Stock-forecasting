@@ -6,13 +6,13 @@ from plotting_helper_functions import*
 
 
 def main(epochs, time_steps, loss, neurons):
-    file = 'Data\Sales\multi_feature_sales_data_weekly.csv'
+    file = 'Data\Sales\multi_feature_sales_data_monthly.csv'
     data = create_df(file)
     data = segment_df(data, '2017-04-01','2021-12-01')
     # view_df(data)
 
     data = replace_missing(data)
-    training_df, testing_df = train_test_split(data, 0.8)
+    training_df, testing_df = train_test_split(data, 0.7)
 
     
     x_train, y_train, x_test, y_test = create_X_Y_train(training_df, testing_df, ['Sales'])
@@ -32,16 +32,16 @@ def main(epochs, time_steps, loss, neurons):
 
     path = '../Results/Sales Predictions'
 
-    plot_loss (history_bilstm, 'BILSTM', path, epochs, neurons, time_steps, 'weekly')                 # hassam comment this line to run forecast onli
-    plot_loss (history_lstm, 'LSTM', path, epochs, neurons, time_steps, 'weekly')                     # hassam comment this line to run forecast onli
+    plot_loss(history_bilstm, 'BILSTM', path, epochs, neurons, time_steps, 'monthly')                 # hassam comment this line to run forecast onli
+    plot_loss(history_lstm, 'LSTM', path, epochs, neurons, time_steps, 'monthly')                     # hassam comment this line to run forecast onli
 
     y_train, y_test = inverse_transformation(scaler_y, y_train_3d, y_test_3d)
 
     bilstm_fit = model_fitting(model_bilstm, x_train_3d, scaler_y)
     lstm_fit = model_fitting(model_lstm, x_train_3d, scaler_y)
 
-    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps, 'weekly')              # hassam comment this line to run forecast onli
-    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps, 'weekly')                  # hassam comment this line to run forecast onli
+    plot_fit(bilstm_fit, y_train, 'BiLSTM', path, epochs, neurons, time_steps, 'monthly')              # hassam comment this line to run forecast onli
+    plot_fit(lstm_fit, y_train, 'LSTM', path, epochs, neurons, time_steps, 'monthly')                  # hassam comment this line to run forecast onli
 
     prediction_bilstm = prediction(model_bilstm, x_test_3d, scaler_y)
     prediction_lstm = prediction(model_lstm, x_test_3d, scaler_y)
@@ -50,8 +50,8 @@ def main(epochs, time_steps, loss, neurons):
     forecasted_dates = testing_df.index.tolist()[-len(sales):]
     test = flatten_nd_list(y_test.tolist())
 
-    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps, 'weekly')     # hassam comment this line to run forecast onli
-    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps, 'weekly')         # hassam comment this line to run forecast onli
+    plot_future(prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps, 'monthly')     # hassam comment this line to run forecast onli
+    plot_future(prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps, 'monthly')         # hassam comment this line to run forecast onli
 
     # evaluate_prediction(prediction_bilstm, y_test, 'Bidirectional LSTM')
     # evaluate_prediction(prediction_lstm, y_test, 'LSTM')
@@ -65,12 +65,7 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
-f,s = main(epochs=200, time_steps= 4, loss='huber_loss', neurons=32    )
-f,s = main(epochs=300, time_steps = 2, loss='huber_loss', neurons=64    )
 f,s = main(epochs=500, time_steps=1, loss='huber_loss', neurons= 128    )
-f,s = main(epochs=300, time_steps=4, loss='huber_loss', neurons=32    )
-f,s = main(epochs=500, time_steps=4, loss='huber_loss', neurons=64    )
-
 
 # plot sales forecast
 # plt.figure(figsize = (10, 6))

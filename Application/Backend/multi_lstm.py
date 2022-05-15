@@ -137,7 +137,8 @@ def create_model_bilstm(module, units, loss, x_train, target_size):
               return_sequences=True),
               input_shape=(x_train.shape[1], x_train.shape[2])))
         model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
-        model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
+        # model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
+        # model.add(Bidirectional(LSTM(units = units, return_sequences = True)))
         model.add(Bidirectional(LSTM(units = units)))
         model.add(Dense(target_size))
 
@@ -171,8 +172,10 @@ def create_model(module, model_name, units, loss, x_train, target_size):
         model.add(Dropout(0.2))
         model.add(model_name (units = units, return_sequences = True))
         model.add(Dropout(0.2))
-        model.add(model_name (units = units, return_sequences = True))
-        model.add(Dropout(0.2))
+        # model.add(model_name (units = units, return_sequences = True))
+        # model.add(Dropout(0.2))
+        # model.add(model_name (units = units, return_sequences = True))
+        # model.add(Dropout(0.2))
         model.add(model_name (units = units))
         model.add(Dropout(0.2))
         model.add(Dense(units = target_size))

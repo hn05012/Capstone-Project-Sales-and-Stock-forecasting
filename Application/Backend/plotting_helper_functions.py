@@ -17,6 +17,7 @@ def plot_loss (history, name, path, epochs, neurons, timesteps, interval):
     title = 'loss ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
     filename = path + '/' + title + '.png'
     plt.title(title)
+    plt.show()
     plt.savefig(filename)
 
 
@@ -47,14 +48,17 @@ def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps, interval):
 
     plt.figure(figsize=(10, 6))
     range_future = len(fit)
+    plt.scatter(np.arange(range_future), np.array(y_train)) 
     plt.plot(np.arange(range_future), np.array(y_train), 
              label='Training Data')     
+    plt.scatter(np.arange(range_future),np.array(fit))
     plt.plot(np.arange(range_future),np.array(fit),
             label='Model Fit ' + name)
     plt.legend(loc='upper left')
     plt.xlabel('Time')
     plt.ylabel('Sales')
     title = 'model_fitting ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
+    plt.title(title)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
@@ -123,14 +127,17 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps, inte
 
     plt.figure(figsize=(10, 6))
     range_future = len(prediction)
+    plt.scatter(np.arange(range_future), np.array(y_test))
     plt.plot(np.arange(range_future), np.array(y_test), 
              label='Test Data')     
+    plt.scatter(np.arange(range_future),np.array(prediction))
     plt.plot(np.arange(range_future),np.array(prediction),
             label='Prediction ' + name)
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
     title = 'forecast ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse=' + str(rmse) + '_' + 'r_sqr=' + str(r_sqr)
+    plt.title(title)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
