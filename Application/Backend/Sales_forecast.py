@@ -65,7 +65,7 @@ def main(epochs, time_steps, loss, neurons):
 
 
 
-f,s = main(epochs=500, time_steps=1, loss='huber_loss', neurons= 128    )
+f,s = main(epochs=300, time_steps=1, loss='huber_loss', neurons= 128    )
 
 # plot sales forecast
 # plt.figure(figsize = (10, 6))

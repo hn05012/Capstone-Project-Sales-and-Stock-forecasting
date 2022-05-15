@@ -15,9 +15,8 @@ def plot_loss (history, name, path, epochs, neurons, timesteps, interval):
     plt.xlabel('epoch')
     plt.legend(['Train loss', 'Validation loss'], loc='upper right')
     title = 'loss ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
-    filename = path + '/' + title + '.png'
     plt.title(title)
-    plt.show()
+    filename = path + '/' + title + '.png'
     plt.savefig(filename)
 
 
