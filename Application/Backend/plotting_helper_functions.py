@@ -7,14 +7,14 @@ import pandas as pd
 import os
 from multi_lstm import evaluate_accuracy
 
-def plot_loss (history, name, path, epochs, neurons, timesteps):
+def plot_loss (history, name, path, epochs, neurons, timesteps, interval):
     plt.figure(figsize = (10, 6))
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.ylabel('Loss')
     plt.xlabel('epoch')
     plt.legend(['Train loss', 'Validation loss'], loc='upper right')
-    title = 'loss' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
+    title = 'loss ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
     filename = path + '/' + title + '.png'
     plt.title(title)
     plt.savefig(filename)
@@ -40,7 +40,7 @@ def plot_loss_stocks (history, name, path, epochs, neurons, timesteps):
 
 
 
-def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
+def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps, interval):
     errors = fit - y_train
     mse = np.square(errors).mean()
     rmse = np.sqrt(mse)
@@ -54,7 +54,7 @@ def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps):
     plt.legend(loc='upper left')
     plt.xlabel('Time')
     plt.ylabel('Sales')
-    title = 'model_fitting' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
+    title = 'model_fitting ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
@@ -114,7 +114,7 @@ def prediction(model, x_test, scaler_y):
 
 
 
-def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
+def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps, interval):
     errors = prediction - y_test
     mse = np.square(errors).mean()
     rmse = np.sqrt(mse)
@@ -130,7 +130,7 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps):
     plt.legend(loc='upper left')
     plt.xlabel('Time (week)')
     plt.ylabel('Sales')
-    title = 'forecast' + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse=' + str(rmse) + '_' + 'r_sqr=' + str(r_sqr)
+    title = 'forecast ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse=' + str(rmse) + '_' + 'r_sqr=' + str(r_sqr)
     filename = path + '/' + title + '.png'
     plt.savefig(filename)
     # plt.show()
@@ -152,8 +152,8 @@ def plot_future_Stocks(forecasting_interval, target_brands, prediction, y_test, 
     df_actual['Date'] = forecasting_interval[-df_forecast.shape[0]:]
     df_actual.set_index('Date',inplace=True)
     
-    for col in df_forecast.columns:
-        df_forecast[col][df_forecast[col] < 0] = 0
+    for col in df.columns:
+        df[col][df[col] < 0] = 0
     
     df = pd.concat([df_actual, df_forecast], axis=1)
     for c in df.columns:

@@ -66,10 +66,10 @@ def main(epochs, time_steps, loss, neurons):
             forecast_dates = testing_df.index.tolist()[-df.shape[0]:]
             df['Date'] = forecast_dates
             df.set_index('Date', inplace=True)
-            df = df.where(df < 0, 0)
+            # df = df.where(df < 0, 0)
             
             results[fname] = df
-            print(results)
+            
             # plot_future_Stocks(forecast_dates, target_brands, prediction_bilstm, y_test, 'BiLSTM', path, epochs, neurons, time_steps)  # hassam comment this line to run forecast onli
             # plot_future_Stocks(forecast_dates, target_brands, prediction_lstm, y_test, 'LSTM', path, epochs, neurons, time_steps)      # hassam comment this line to run forecast onli
 
@@ -77,4 +77,4 @@ def main(epochs, time_steps, loss, neurons):
 
 
 stock_predictions = main(epochs=300, time_steps=3, loss = 'huber_loss', neurons=128)
-
+print(stock_predictions)
