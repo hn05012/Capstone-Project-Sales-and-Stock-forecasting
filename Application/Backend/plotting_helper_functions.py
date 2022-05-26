@@ -17,7 +17,8 @@ def plot_loss (history, name, path, epochs, neurons, timesteps, interval):
     title = 'loss ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps)
     plt.title(title)
     filename = path + '/' + title + '.png'
-    plt.savefig(filename)
+    plt.show()
+    # plt.savefig(filename)
 
 
 
@@ -59,8 +60,8 @@ def plot_fit(fit, y_train, name, path, epochs, neurons, timesteps, interval):
     title = 'model_fitting ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse' + str(rmse)
     plt.title(title)
     filename = path + '/' + title + '.png'
-    plt.savefig(filename)
-    # plt.show()
+    # plt.savefig(filename)
+    plt.show()
 
 
 
@@ -138,8 +139,8 @@ def plot_future(prediction, y_test, name, path, epochs, neurons, timesteps, inte
     title = 'forecast ' + str(interval) + '_' + name + '_' + 'epochs=' + str(epochs) + '_' + 'neurons=' + str(neurons) + '_' + 'timesteps=' + str(timesteps) + '_' + 'rmse=' + str(rmse) + '_' + 'r_sqr=' + str(r_sqr)
     plt.title(title)
     filename = path + '/' + title + '.png'
-    plt.savefig(filename)
-    # plt.show()
+    # plt.savefig(filename)
+    plt.show()
 
 
 
